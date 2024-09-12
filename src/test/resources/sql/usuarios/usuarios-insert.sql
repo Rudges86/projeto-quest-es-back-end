@@ -1,0 +1,5 @@
+insert into Usuarios (id, nome, email, password, role, status) values (101,'Rudge', 'rudges86@gmail.com','$2a$12$VQSVztr/M8tcwzcy9jJgFebpqybKpF4FVwM3zilhOAI4yL1iW3rJa' , 'ROLE_ADMIN', 'ATIVO');
+insert into Usuarios (id, nome, email, password, role, status) values (102,'Valdinete', 'valdinete@gmail.com','$2a$12$VQSVztr/M8tcwzcy9jJgFebpqybKpF4FVwM3zilhOAI4yL1iW3rJa' , 'ROLE_CLIENTE', 'ATIVO');
+insert into Usuarios (id, nome, email, password, role, status) values (103,'Juçânia', 'jucania@gmail.com','$2a$12$VQSVztr/M8tcwzcy9jJgFebpqybKpF4FVwM3zilhOAI4yL1iW3rJa' , 'ROLE_CLIENTE', 'ATIVO');
+insert into Usuarios (id, nome, email, password, role, status) values (104,'Barbára', 'babi@gmail.com','$2a$12$VQSVztr/M8tcwzcy9jJgFebpqybKpF4FVwM3zilhOAI4yL1iW3rJa' , 'ROLE_CLIENTE', 'ATIVO');
+insert into Usuarios (id, nome, email, password, role, status) values (105,'Raul', 'raul@gmail.com','$2a$12$VQSVztr/M8tcwzcy9jJgFebpqybKpF4FVwM3zilhOAI4yL1iW3rJa' , 'ROLE_CLIENTE', 'ATIVO');
