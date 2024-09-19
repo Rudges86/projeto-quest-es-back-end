@@ -15,6 +15,7 @@ import com.questoes.questoes.web.dto.usuario.CadastrarUsuarioDTO;
 import com.questoes.questoes.web.dto.usuario.EditarUsuarioDto;
 import com.questoes.questoes.web.dto.usuario.ResponseEditarUsuarioDto;
 import com.questoes.questoes.web.exception.exceptions.EntityNotFoundException;
+import com.questoes.questoes.web.exception.exceptions.RegisteredUserException;
 import com.questoes.questoes.web.exception.exceptions.UUIDNotFoundException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -43,26 +44,35 @@ public class UsuarioService {
 
     private final UsuarioVerificadorRepository usuarioVerificadorRepository;
     private final PasswordEncoder passwordEncoder;
+
+    @Transactional
+    public Usuarios buscarUsuarioCadastrado(String email) {
+        Optional<Usuarios> usuarios = usuarioRepository.findByEmail(email);
+        if(usuarios.isPresent()){
+            throw new RegisteredUserException("Usuario já cadastrado");
+        }
+        return null;
+    }
     @Transactional
     public String createUsuario(CadastrarUsuarioDTO usuario) {
         try {
             if(!usuario.getPassword().equals(usuario.getConfirmaSenha())) {
                 return "As senhas são diferentes";
             }
+            Usuarios usuarios = buscarUsuarioCadastrado(usuario.getEmail());
 
-            Usuarios usuarios = UsuarioMapper.toUsuario( usuario);
+            usuarios = UsuarioMapper.toUsuario(usuario);
             usuarios.setPassword(passwordEncoder.encode(usuarios.getPassword()));
             usuarioRepository.save(usuarios);
-
             Integer uid = Integer.parseInt(gerarCodigoAleatorio());
-            UsuarioVerificador usuarioVerificador =  new UsuarioVerificador();
+            UsuarioVerificador usuarioVerificador = new UsuarioVerificador();
             usuarioVerificador.setUsuario(usuarios);
             usuarioVerificador.setUuid(uid);
-            usuarioVerificador.setTempoExpiracao(Instant.now().plusSeconds( 60));
+            usuarioVerificador.setTempoExpiracao(Instant.now().plusSeconds(60));
 
             String message = String.format("Olá %s, você foi cadastrado com sucesso!!, acesse o link:http://localhost:8080/api/validar/%s , " +
-                                "para validar o usuário."
-                        , usuarios.getEmail(), usuarioVerificador.getUuid());
+                               "para validar o usuário."
+                      , usuarios.getEmail(), usuarioVerificador.getUuid());
             emailService.enviarEmailTexto(usuarios.getEmail(), "Cadastrado com sucesso", message);
 
             usuarioVerificadorRepository.save(usuarioVerificador);
@@ -103,7 +113,7 @@ public class UsuarioService {
         mensagem = String.format("Ola %s a sua senha temporaria é esta %s , ela é válida por 15 minutos." +
                         " Clique no link para trocar a senha." +
                         " link:http://localhost:8080/api/alterarSenhaObrigatorio/%s"
-                ,usuarios.getEmail(),usuarioVerificador.get().getUuid(),senhaTemporaria);
+                ,usuarios.getEmail(),senhaTemporaria,usuarioVerificador.get().getUuid());
         emailService.enviarEmailTexto(usuarios.getEmail(), "Recuperação de Senha e confirmação de e-mail", mensagem);
         return "Foi enviado um e-mail de confirmação por favor confira a sua caixa de entrada.";
     }

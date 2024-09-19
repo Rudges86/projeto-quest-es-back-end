@@ -5,14 +5,15 @@ import com.questoes.questoes.entity.Banca;
 import com.questoes.questoes.entity.Disciplina;
 
 import java.util.List;
-@JsonPropertyOrder({"id", "pergunta" ,"resposta", "alternativas","banca","disciplina", "imagem"})
+@JsonPropertyOrder({"id","texto", "pergunta" ,"resposta", "alternativas","banca","disciplina", "imagem"})
 public interface QuestoesProjection {
     Long getId();
-    String getpergunta();
+    String getPergunta();
     List<String> getAlternativas();
     String getResposta();
     BancaProjection getBanca();
     DisciplinaProjection getDisciplina();
+    String getTexto();
     byte[] getImagem();
 
 

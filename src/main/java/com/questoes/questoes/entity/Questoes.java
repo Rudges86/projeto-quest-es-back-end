@@ -28,6 +28,8 @@ public class Questoes {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, updatable = false, name = "id")
     private Long id;
+    @Column(name = "texto", columnDefinition = "TEXT")
+    private String texto;
 
     @Column(nullable = false, name="pergunta")
     private String pergunta;

@@ -19,4 +19,5 @@ public class CadastrarQuestoesDTO {
     private List<String> alternativas;
     private String resposta;
     private String dificuldade;
+    private String texto;
 }

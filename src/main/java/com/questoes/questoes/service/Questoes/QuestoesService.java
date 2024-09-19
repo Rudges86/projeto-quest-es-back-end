@@ -100,6 +100,7 @@ public class QuestoesService {
             questao.setResposta(cadastrarQuestao.getResposta());
             questao.setAno(cadastrarQuestao.getAno());
             questao.setDificuldade(Dificuldade.valueOf(cadastrarQuestao.getDificuldade().toUpperCase()));
+            questao.setTexto(cadastrarQuestao.getTexto());
             questoesRepository.save(questao);
 
             return mensagem;
