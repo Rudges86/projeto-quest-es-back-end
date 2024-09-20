@@ -62,6 +62,16 @@ public class Usuarios {
     @Column(name = "modificado_por")
     private String modificadoPor;
 
+
+    public Usuarios(Long id, String nome, String email, String password, Role role, StatusUsuario status) {
+        this.id = id;
+        this.nome = nome;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "Usuarios{" +

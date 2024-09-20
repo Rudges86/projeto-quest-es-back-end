@@ -28,9 +28,11 @@ import static org.springframework.security.web.util.matcher.AntPathRequestMatche
 @EnableMethodSecurity
 @EnableWebMvc
 @Configuration
-public class SpringSecurityConfig {
+public class SpringSecurityConfig  {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, MvcRequestMatcher.Builder mvc) throws Exception {
+        //Libera os frames do h2
+        http.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()));
         return http.cors().and()
                 .csrf(csrf -> csrf.disable())
                 .formLogin(form -> form.disable())
@@ -47,7 +49,8 @@ public class SpringSecurityConfig {
                                 antMatcher("/docs-park/**"),
                                 antMatcher("/swagger-ui.html"),
                                 antMatcher("/swagger-ui/**"),
-                                antMatcher("/webjars/**")
+                                antMatcher("/webjars/**"),
+                                antMatcher("/h2-console/**")
                         ).permitAll()
                         .anyRequest().authenticated()
                 ).sessionManagement(
