@@ -69,8 +69,8 @@ public class UsuarioService {
             usuarioVerificador.setUsuario(usuarios);
             usuarioVerificador.setUuid(uid);
             usuarioVerificador.setTempoExpiracao(Instant.now().plusSeconds(60));
-
-            String message = String.format("Olá %s, você foi cadastrado com sucesso!!, acesse o link:http://localhost:8080/api/validar/%s , " +
+            //http://localhost:8080/api/validar/%s
+            String message = String.format("Olá %s, você foi cadastrado com sucesso!!, acesse o link:http://localhost:4200/validar/%s , " +
                                "para validar o usuário."
                       , usuarios.getEmail(), usuarioVerificador.getUuid());
             emailService.enviarEmailTexto(usuarios.getEmail(), "Cadastrado com sucesso", message);
