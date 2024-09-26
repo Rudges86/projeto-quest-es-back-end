@@ -77,7 +77,7 @@ public class UsuarioService {
 
             usuarioVerificadorRepository.save(usuarioVerificador);
 
-            return "Usuario cadastrado com sucesso";
+            return "Usuario cadastrado com sucesso, siga as instruções no e-mail para fazer login.";
 
         } catch (DataIntegrityViolationException e) {
             return e.getLocalizedMessage();

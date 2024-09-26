@@ -49,7 +49,7 @@ public class ApiExceptionHandler {
         StringBuilder mensagem = new StringBuilder();
 
         for(FieldError error : result.getFieldErrors()) {
-            mensagem.append(error.getDefaultMessage());
+            mensagem.append(error.getDefaultMessage()).append("\n");
         }
 
         return ResponseEntity
@@ -58,7 +58,7 @@ public class ApiExceptionHandler {
                 .body(new ErrorMessage(
                         request,
                         HttpStatus.UNPROCESSABLE_ENTITY,
-                            mensagem.toString()
+                            mensagem.toString().trim()
                         ));
     }
 
@@ -101,4 +101,6 @@ public class ApiExceptionHandler {
         return ResponseEntity.status((HttpStatus.BAD_REQUEST)).contentType(MediaType.APPLICATION_JSON)
                 .body(errorMessage);
     }
+
+
 }

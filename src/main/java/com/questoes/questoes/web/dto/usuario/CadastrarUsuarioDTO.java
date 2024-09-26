@@ -20,9 +20,9 @@ public class CadastrarUsuarioDTO {
     @NotNull
     private String email;
     @NotNull
-    @Size(min=6, max=6)
+    @Size(min=6, max=12, message = "A senha deve ter no minímo 6 caracteres e no máximo 12")
     private String password;
     @NotNull
-    @Size(min=6, max=6)
+    @Size(min=6, max=12, message = "A senha deve ter no minímo 6 caracteres e no máximo 12")
     private String confirmaSenha;
 }
