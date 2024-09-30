@@ -20,6 +20,6 @@ public class UsuarioLoginDTO {
     private String email;
 
     @NotNull
-    @Size(max = 6, min = 6)
+    @Size(max = 12, min = 6, message = "Senha inválida")
     private String password;
 }
