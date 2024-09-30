@@ -71,10 +71,9 @@ public class UsuarioController {
             return ResponseEntity.ok().body(responseMensagemDTO);
     }
 
-    @GetMapping("/perfil/{id}")
-    public ResponseEntity<ResponseEditarUsuarioDto> recuperarDadosDoPerfil(@PathVariable String id) {
-        ResponseEditarUsuarioDto dto = usuarioService.recuperarPerfil(id);
-        return ResponseEntity.ok().body(dto);
+    @GetMapping("/perfil")
+    public ResponseEntity<UsuarioPerfilDTO> recuperarDadosDoPerfil() {
+        return ResponseEntity.ok().body(usuarioService.recuperarPerfilUsuario());
     }
   /*  public ResponseEntity<Resource> recuperarDadosDoPerfil(@PathVariable String id) {
        byte[] imagem =  usuarioService.recuperarPerfil(id);

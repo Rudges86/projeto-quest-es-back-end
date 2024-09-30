@@ -10,10 +10,7 @@ import com.questoes.questoes.repository.usuario.UsuarioVerificadorRepository;
 import com.questoes.questoes.service.email.EmailService;
 import com.questoes.questoes.web.dto.ResponseMensagemDTO;
 import com.questoes.questoes.web.dto.mapper.UsuarioMapper;
-import com.questoes.questoes.web.dto.usuario.AlterarUsuarioObrigatorioDTO;
-import com.questoes.questoes.web.dto.usuario.CadastrarUsuarioDTO;
-import com.questoes.questoes.web.dto.usuario.EditarUsuarioDto;
-import com.questoes.questoes.web.dto.usuario.ResponseEditarUsuarioDto;
+import com.questoes.questoes.web.dto.usuario.*;
 import com.questoes.questoes.web.exception.exceptions.EntityNotFoundException;
 import com.questoes.questoes.web.exception.exceptions.RegisteredUserException;
 import com.questoes.questoes.web.exception.exceptions.UUIDNotFoundException;
@@ -21,6 +18,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -275,5 +274,12 @@ public class UsuarioService {
         editarUsuarioDto.setImagem(usuarios.getImagemPerfil());
         editarUsuarioDto.setEmail(usuarios.getEmail());
         return editarUsuarioDto;
+    }
+
+    public UsuarioPerfilDTO recuperarPerfilUsuario() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Usuarios usuarios =  usuarioRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("Não encontrado"));
+        return UsuarioMapper.toUsuarioPerfilDto(usuarios);
     }
 }

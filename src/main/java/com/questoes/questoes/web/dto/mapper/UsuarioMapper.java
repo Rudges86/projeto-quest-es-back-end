@@ -2,8 +2,9 @@ package com.questoes.questoes.web.dto.mapper;
 
 import com.questoes.questoes.entity.usuario.Usuarios;
 import com.questoes.questoes.web.dto.usuario.CadastrarUsuarioDTO;
+import com.questoes.questoes.web.dto.usuario.UsuarioPerfilDTO;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.PropertyMap;
+
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,6 +13,11 @@ public class UsuarioMapper {
     public static Usuarios toUsuario(CadastrarUsuarioDTO createDto) {
         return new ModelMapper().map(createDto, Usuarios.class);
     }
+
+    public static UsuarioPerfilDTO toUsuarioPerfilDto(Usuarios usuarios) {
+        return new ModelMapper().map(usuarios, UsuarioPerfilDTO.class);
+    }
+
 
     /*public static UsuarioResponseDto toDto(Usuarios usuario) {
         String role = usuario.getRole().name().substring("ROLE_".length());
