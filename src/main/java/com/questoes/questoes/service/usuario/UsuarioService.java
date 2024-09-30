@@ -55,7 +55,6 @@ public class UsuarioService {
     }
     @Transactional
     public String createUsuario(CadastrarUsuarioDTO usuario) {
-        try {
             if(!usuario.getPassword().equals(usuario.getConfirmaSenha())) {
                 return "As senhas são diferentes";
             }
@@ -78,10 +77,6 @@ public class UsuarioService {
             usuarioVerificadorRepository.save(usuarioVerificador);
 
             return "Usuario cadastrado com sucesso, siga as instruções no e-mail para fazer login.";
-
-        } catch (DataIntegrityViolationException e) {
-            return e.getLocalizedMessage();
-        }
     }
 
     @Transactional
