@@ -42,8 +42,9 @@ public class SpringSecurityConfig  {
                         .requestMatchers(antMatcher(HttpMethod.POST, "/api/recuperarUsuario")).permitAll()
                         .requestMatchers(antMatcher(HttpMethod.GET, "/api/validar/{uuid}")).permitAll()
                         .requestMatchers(antMatcher(HttpMethod.GET, "/api/alterarSenhaObrigatorio/{id}")).permitAll()
-                        .requestMatchers(antMatcher(HttpMethod.PATCH, "/api//alterarSenhaObrigatorio/{id}")).permitAll()
-                        .requestMatchers(antMatcher(HttpMethod.POST, "/api/login")).permitAll()
+                        .requestMatchers(antMatcher(HttpMethod.PATCH, "/api/alterarSenhaObrigatorio/{id}")).permitAll()
+                        .requestMatchers(antMatcher(HttpMethod.POST, "/api/auth/login")).permitAll()
+                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/auth/validate-token")).permitAll()
                         .requestMatchers(
                                 antMatcher("/docs-park.html"),
                                 antMatcher("/docs-park/**"),

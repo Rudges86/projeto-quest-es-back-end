@@ -64,10 +64,10 @@ public class UsuarioController {
         return ResponseEntity.ok().body(usuarioService.alterarSenhaObrigatorio(Integer.parseInt(id),alterarUsuarioDTO));
     }
 
-    @PatchMapping("/editarPerfil/{id}")
-    public ResponseEntity<ResponseMensagemDTO> editarPerfil(@PathVariable String id, @RequestParam("imagem") MultipartFile imagem,
+    @PatchMapping("/editarPerfil")
+    public ResponseEntity<ResponseMensagemDTO> editarPerfil(@RequestParam(value = "imagem", required = false) MultipartFile imagem,
                                           @ModelAttribute EditarUsuarioDto dto) {
-            ResponseMensagemDTO responseMensagemDTO = usuarioService.editarUsuario(Long.parseLong(id), imagem, dto);
+            ResponseMensagemDTO responseMensagemDTO = usuarioService.editarUsuario(imagem, dto);
             return ResponseEntity.ok().body(responseMensagemDTO);
     }
 

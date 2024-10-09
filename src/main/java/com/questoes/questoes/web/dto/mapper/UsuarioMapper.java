@@ -15,7 +15,9 @@ public class UsuarioMapper {
     }
 
     public static UsuarioPerfilDTO toUsuarioPerfilDto(Usuarios usuarios) {
-        return new ModelMapper().map(usuarios, UsuarioPerfilDTO.class);
+        UsuarioPerfilDTO dto = new ModelMapper().map(usuarios, UsuarioPerfilDTO.class);
+        dto.setRole(usuarios.getRole().name().replace("ROLE_",""));
+        return dto;
     }
 
 

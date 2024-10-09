@@ -197,14 +197,13 @@ public class UsuarioService {
     }
 
     @Transactional
-    public ResponseMensagemDTO editarUsuario(Long id, MultipartFile file, EditarUsuarioDto dto) {
+    public ResponseMensagemDTO editarUsuario(MultipartFile file, EditarUsuarioDto dto) {
         ResponseMensagemDTO responseMensagemDTO = new ResponseMensagemDTO();
         try {
 
             responseMensagemDTO.setMessage("Editado com Sucesso!");
 
-            Usuarios usuarios = usuarioRepository.findById(id).orElseThrow(
-                    ()-> new EntityNotFoundException("Não foi encontrado!!"));
+            Usuarios usuarios =  usuarioRepository.findByEmail(dto.getEmail()).orElseThrow(() -> new EntityNotFoundException("Não encontrado"));
 
             if(!usuarios.getNome().equals(dto.getNome())) {
                 usuarios.setNome(dto.getNome());
@@ -265,16 +264,6 @@ public class UsuarioService {
         Usuarios usuarios = usuarioRepository.findById(Long.parseLong(id)).orElseThrow( () -> new EntityNotFoundException("Usuário não encontrado"));
         return usuarios.getImagemPerfil();
     }*/
-
-    public ResponseEditarUsuarioDto recuperarPerfil(String id) {
-
-        Usuarios usuarios = usuarioRepository.findById(Long.parseLong(id)).orElseThrow( () -> new EntityNotFoundException("Usuário não encontrado"));
-        ResponseEditarUsuarioDto editarUsuarioDto = new ResponseEditarUsuarioDto();
-        editarUsuarioDto.setNome(usuarios.getNome());
-        editarUsuarioDto.setImagem(usuarios.getImagemPerfil());
-        editarUsuarioDto.setEmail(usuarios.getEmail());
-        return editarUsuarioDto;
-    }
 
     public UsuarioPerfilDTO recuperarPerfilUsuario() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

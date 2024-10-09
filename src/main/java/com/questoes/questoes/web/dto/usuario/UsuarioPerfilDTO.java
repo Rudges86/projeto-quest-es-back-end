@@ -16,8 +16,9 @@ public class UsuarioPerfilDTO {
     private String nome;
     private String email;
     private byte[] imagemPerfil;
-    @Enumerated(EnumType.STRING)
-    private Role role;
+    /*@Enumerated(EnumType.STRING)
+    private Role role;*/
+    private String role;
     @Enumerated(EnumType.STRING)
     private StatusUsuario status;
 
