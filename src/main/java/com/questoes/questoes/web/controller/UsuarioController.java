@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -65,6 +66,7 @@ public class UsuarioController {
     }
 
     @PatchMapping("/editarPerfil")
+    @PreAuthorize("hasRole('ADMIN') OR hasRole('USUARIO')")
     public ResponseEntity<ResponseMensagemDTO> editarPerfil(@RequestParam(value = "imagem", required = false) MultipartFile imagem,
                                           @ModelAttribute EditarUsuarioDto dto) {
             ResponseMensagemDTO responseMensagemDTO = usuarioService.editarUsuario(imagem, dto);
@@ -72,6 +74,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/perfil")
+    @PreAuthorize("hasRole('ADMIN') OR hasRole('USUARIO')")
     public ResponseEntity<UsuarioPerfilDTO> recuperarDadosDoPerfil() {
         return ResponseEntity.ok().body(usuarioService.recuperarPerfilUsuario());
     }

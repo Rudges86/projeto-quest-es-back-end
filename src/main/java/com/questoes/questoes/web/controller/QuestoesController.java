@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +37,8 @@ public class QuestoesController {
     */
     /*Já pode cadastrar por inteiro*/
     @PostMapping("/cadastrar")
-    public ResponseEntity<ResponseMensagemDTO> cadastrarQuestoes(@RequestParam("imagem") MultipartFile imagem, @ModelAttribute CadastrarQuestoesDTO dto) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ResponseMensagemDTO> cadastrarQuestoes(@RequestParam(value = "imagem", required = false) MultipartFile imagem, @ModelAttribute CadastrarQuestoesDTO dto) {
         if(imagem.isEmpty() || imagem == null) {
             ResponseMensagemDTO responseMensagemDTO = questoesService.cadastrarQuestao(dto);
             return ResponseEntity.status(HttpStatus.CREATED).body(responseMensagemDTO);
@@ -46,13 +48,17 @@ public class QuestoesController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseMensagemDTO);
     }
 
-    @GetMapping("/questoes")
-    public ResponseEntity<PageableDTO> buscarTodasAsQuestoes(@PageableDefault(size = 5, sort= {"pergunta"}) Pageable pageable) {
+    @GetMapping()
+    public ResponseEntity<PageableDTO> buscarTodasAsQuestoes(
+            @RequestParam(name="banca", required = false, defaultValue = "") Long bancaId,
+            @RequestParam(name="disciplina", required = false, defaultValue = "") Long disciplinaId,
+            @PageableDefault(size = 5, sort= {"pergunta"}) Pageable pageable) {
         Page<QuestoesProjection> questoes = questoesService.buscarTodasQuestoes(pageable);
         return ResponseEntity.ok().body(PageableMapper.toDto(questoes));
     }
 
-    @PostMapping("/questoes")
+    @PostMapping()
+    @PreAuthorize("hasRole('ADMIN') OR hasRole('USUARIO')")
     public ResponseEntity<ResponseMensagemDTO> responderQuestao(@RequestParam Long id, @RequestBody RespostaUsuarioDto respostaUsuario, @AuthenticationPrincipal JwtUserDetails userDetails) {
         ResponseMensagemDTO mensagemDTO = questoesService.resposta(id,respostaUsuario, userDetails.getUsername());
         return ResponseEntity.ok().body(mensagemDTO);

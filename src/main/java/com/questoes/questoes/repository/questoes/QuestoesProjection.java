@@ -10,7 +10,7 @@ public interface QuestoesProjection {
     Long getId();
     String getPergunta();
     List<String> getAlternativas();
-    String getResposta();
+    //String getResposta();
     BancaProjection getBanca();
     DisciplinaProjection getDisciplina();
     String getTexto();

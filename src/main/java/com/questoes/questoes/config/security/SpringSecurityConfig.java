@@ -45,6 +45,7 @@ public class SpringSecurityConfig  {
                         .requestMatchers(antMatcher(HttpMethod.PATCH, "/api/alterarSenhaObrigatorio/{id}")).permitAll()
                         .requestMatchers(antMatcher(HttpMethod.POST, "/api/auth/login")).permitAll()
                         .requestMatchers(antMatcher(HttpMethod.GET, "/api/auth/validate-token")).permitAll()
+                        .requestMatchers(antMatcher(HttpMethod.GET, "/api/questoes")).permitAll()
                         .requestMatchers(
                                 antMatcher("/docs-park.html"),
                                 antMatcher("/docs-park/**"),
