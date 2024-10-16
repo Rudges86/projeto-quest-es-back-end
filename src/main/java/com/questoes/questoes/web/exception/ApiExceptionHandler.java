@@ -1,9 +1,6 @@
 package com.questoes.questoes.web.exception;
 
-import com.questoes.questoes.web.exception.exceptions.EntityNotFoundException;
-import com.questoes.questoes.web.exception.exceptions.InvalidCredencialException;
-import com.questoes.questoes.web.exception.exceptions.RegisteredUserException;
-import com.questoes.questoes.web.exception.exceptions.UUIDNotFoundException;
+import com.questoes.questoes.web.exception.exceptions.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -102,5 +99,12 @@ public class ApiExceptionHandler {
                 .body(errorMessage);
     }
 
-
+    @ExceptionHandler(PasswordMissMatchException.class)
+    public ResponseEntity<ErrorMessage> passwordMissMatchException(Exception ex, HttpServletRequest request) {
+        ErrorMessage errorMessage = new ErrorMessage(
+                request, HttpStatus.BAD_REQUEST, ex.getMessage()
+        );
+        return ResponseEntity.status((HttpStatus.BAD_REQUEST)).contentType(MediaType.APPLICATION_JSON)
+                .body(errorMessage);
+    }
 }

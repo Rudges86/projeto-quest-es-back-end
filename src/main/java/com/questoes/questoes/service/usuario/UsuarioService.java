@@ -12,6 +12,7 @@ import com.questoes.questoes.web.dto.ResponseMensagemDTO;
 import com.questoes.questoes.web.dto.mapper.UsuarioMapper;
 import com.questoes.questoes.web.dto.usuario.*;
 import com.questoes.questoes.web.exception.exceptions.EntityNotFoundException;
+import com.questoes.questoes.web.exception.exceptions.PasswordMissMatchException;
 import com.questoes.questoes.web.exception.exceptions.RegisteredUserException;
 import com.questoes.questoes.web.exception.exceptions.UUIDNotFoundException;
 import lombok.Getter;
@@ -42,38 +43,48 @@ public class UsuarioService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public Usuarios buscarUsuarioCadastrado(String email) {
+    public void buscarUsuarioCadastrado(String email) {
         Optional<Usuarios> usuarios = usuarioRepository.findByEmail(email);
         if(usuarios.isPresent()){
             throw new RegisteredUserException("Usuario já cadastrado");
         }
-        return null;
     }
     @Transactional
     public String createUsuario(CadastrarUsuarioDTO usuario) {
-            if(!usuario.getPassword().equals(usuario.getConfirmaSenha())) {
-                return "As senhas são diferentes";
-            }
-            Usuarios usuarios = buscarUsuarioCadastrado(usuario.getEmail());
-            usuarios = UsuarioMapper.toUsuario(usuario);
+
+            validarSenha(usuario.getPassword(), usuario.getConfirmaSenha());
+
+            buscarUsuarioCadastrado(usuario.getEmail());
+
+            Usuarios usuarios = UsuarioMapper.toUsuario(usuario);
             usuarios.setPassword(passwordEncoder.encode(usuarios.getPassword()));
             usuarioRepository.save(usuarios);
+
             Integer uid = Integer.parseInt(gerarCodigoAleatorio());
+
             UsuarioVerificador usuarioVerificador = new UsuarioVerificador();
             usuarioVerificador.setUsuario(usuarios);
             usuarioVerificador.setUuid(uid);
             usuarioVerificador.setTempoExpiracao(LocalDateTime.now().plusHours(1));
-            //http://localhost:8080/api/validar/%s
-            String message = String.format("Olá %s, você foi cadastrado com sucesso!!, acesse o link:http://localhost:4200/validar/%s , " +
-                               "para validar o usuário."
-                      , usuarios.getEmail(), usuarioVerificador.getUuid());
-            emailService.enviarEmailTexto(usuarios.getEmail(), "Cadastrado com sucesso", message);
 
+            enviarEmail(usuarios.getEmail(),usuarioVerificador.getUuid());
             usuarioVerificadorRepository.save(usuarioVerificador);
 
             return "Usuario cadastrado com sucesso, siga as instruções no e-mail para fazer login.";
     }
 
+    private void validarSenha(String password, String confirmaSenha) {
+        if (!password.equals(confirmaSenha)) {
+            throw new PasswordMissMatchException("As senhas são diferentes");
+        }
+    }
+
+    private void enviarEmail(String email , Integer uid) {
+        String message = String.format("Olá %s, você foi cadastrado com sucesso!!, acesse o link:http://localhost:4200/validar/%s , " +
+                        "para validar o usuário."
+                , email, uid);
+        emailService.enviarEmailTexto(email, "Cadastrado com sucesso", message);
+    }
 
 
     @Transactional
