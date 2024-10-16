@@ -17,7 +17,6 @@ import com.questoes.questoes.web.exception.exceptions.UUIDNotFoundException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,9 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 import java.security.SecureRandom;
-import java.time.Duration;
-import java.time.Instant;
-import java.time.ZoneId;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -58,7 +55,6 @@ public class UsuarioService {
                 return "As senhas são diferentes";
             }
             Usuarios usuarios = buscarUsuarioCadastrado(usuario.getEmail());
-
             usuarios = UsuarioMapper.toUsuario(usuario);
             usuarios.setPassword(passwordEncoder.encode(usuarios.getPassword()));
             usuarioRepository.save(usuarios);
@@ -66,7 +62,7 @@ public class UsuarioService {
             UsuarioVerificador usuarioVerificador = new UsuarioVerificador();
             usuarioVerificador.setUsuario(usuarios);
             usuarioVerificador.setUuid(uid);
-            usuarioVerificador.setTempoExpiracao(Instant.now().plusSeconds(60));
+            usuarioVerificador.setTempoExpiracao(LocalDateTime.now().plusHours(1));
             //http://localhost:8080/api/validar/%s
             String message = String.format("Olá %s, você foi cadastrado com sucesso!!, acesse o link:http://localhost:4200/validar/%s , " +
                                "para validar o usuário."
@@ -77,6 +73,8 @@ public class UsuarioService {
 
             return "Usuario cadastrado com sucesso, siga as instruções no e-mail para fazer login.";
     }
+
+
 
     @Transactional
     public String recuperarUsuario(String email) {
@@ -130,12 +128,6 @@ public class UsuarioService {
             usuarioVerificadorRepository.deleteById(usuarioVerificador.getId());
             return "Tempo de validação expirado, faça um novo cadastro";
     }
-
-
-/*Criar um método get para validar os dados enviados no e-mail para que ele possa prosseguir para alterar a senha
- */
-
-
 
     @Transactional
     public ResponseMensagemDTO alterarSenhaObrigatorio(Integer id, AlterarUsuarioObrigatorioDTO dto) {
@@ -223,10 +215,8 @@ public class UsuarioService {
         }
     }
 
-    private boolean validaTempoExpiracao(Instant tempo) {
-        Boolean tempoExpiracao = Duration.between(Instant.now(), tempo)
-                .compareTo(Duration.ofSeconds(0)) >= 0;
-        return tempoExpiracao;
+     private boolean validaTempoExpiracao(LocalDateTime tempo) {
+        return tempo.isAfter(LocalDateTime.now());
     }
 
     //Para rotina de deletar
@@ -251,8 +241,8 @@ public class UsuarioService {
 
         usuarioVerificador.get().setUsuario(usuarios);
         usuarioVerificador.get().setUuid(Integer.parseInt(gerarCodigoAleatorio()));
-        usuarioVerificador.get().setTempoExpiracao(Instant.now().plusSeconds( 15 * 60).atZone(ZoneId.systemDefault()).toInstant());
-        usuarioVerificador.get().setTempoExpiracaoSenhaTemporaria(Instant.now().plusSeconds(15 * 60));
+        usuarioVerificador.get().setTempoExpiracao(LocalDateTime.now().plusMinutes(15));
+        usuarioVerificador.get().setTempoExpiracaoSenhaTemporaria(LocalDateTime.now().plusMinutes(15));
         usuarioVerificador.get().setSenhaTemporaria(String.valueOf(senhaTemporaria));
         usuarioVerificador.get().setContador(usuarioVerificador.get().getContador() + 1);
 

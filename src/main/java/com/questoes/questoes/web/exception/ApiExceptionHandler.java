@@ -7,7 +7,6 @@ import com.questoes.questoes.web.exception.exceptions.UUIDNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.Response;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -66,8 +65,9 @@ public class ApiExceptionHandler {
     public ResponseEntity<ErrorMessage> invalidCredencialException(InvalidCredencialException ex, HttpServletRequest request){
         Object [] params = new Object[]{ex.getNome()};
         String message = messageSource.getMessage("exception.invalidCredencialException", params, request.getLocale());
+        ErrorMessage erro = new ErrorMessage(request, HttpStatus.BAD_REQUEST, message);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON)
-                .body(new ErrorMessage(request, HttpStatus.BAD_REQUEST, message));
+                .body(erro);
     }
 
     @ExceptionHandler(Exception.class)

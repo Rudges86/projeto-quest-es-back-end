@@ -5,9 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.Instant;
-import java.util.UUID;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "usuarioVerificador")
@@ -23,11 +21,11 @@ public class UsuarioVerificador {
     @Column(name = "uuid")
     private Integer uuid;
     @Column(name = "tempoExpiracao")
-    private Instant tempoExpiracao;
+    private LocalDateTime tempoExpiracao;
     @Column(name = "senhaTemporaria")
     private String senhaTemporaria;
     @Column(name="tempoExpiracaoSenhaTemporaria")
-    private Instant tempoExpiracaoSenhaTemporaria;
+    private LocalDateTime tempoExpiracaoSenhaTemporaria;
     @Column(name="contador")
     private Integer contador = 0;
 
