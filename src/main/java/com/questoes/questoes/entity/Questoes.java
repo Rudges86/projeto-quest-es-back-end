@@ -59,9 +59,13 @@ public class Questoes {
 
     @ManyToOne
     @JoinColumn(name="disciplina_id", referencedColumnName = "id")
-    @JsonBackReference
+    @JsonBackReference //Usado para anotações biDirecionais
     private Disciplina disciplina;
 
+    @ManyToOne
+    @JoinColumn(name = "assunto_id", referencedColumnName = "id")
+    @JsonBackReference
+    private Assunto assunto;
 
     @CreatedDate
     @Column(name = "data_criacao")
