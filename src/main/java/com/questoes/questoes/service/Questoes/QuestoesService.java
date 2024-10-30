@@ -1,27 +1,21 @@
 package com.questoes.questoes.service.Questoes;
 
-import com.questoes.questoes.entity.Banca;
-import com.questoes.questoes.entity.Disciplina;
-import com.questoes.questoes.entity.Questoes;
-import com.questoes.questoes.entity.UsuarioQuestao;
+import com.questoes.questoes.entity.*;
 import com.questoes.questoes.entity.enumerate.dificuldade.Dificuldade;
 import com.questoes.questoes.repository.questoes.QuestoesProjection;
 import com.questoes.questoes.repository.questoes.QuestoesRepository;
-import com.questoes.questoes.repository.usuarioquestao.UsuarioQuestaoRepository;
+import com.questoes.questoes.service.assunto.AssuntoService;
 import com.questoes.questoes.service.banca.BancaService;
 import com.questoes.questoes.service.disciplina.DisciplinaService;
-import com.questoes.questoes.service.usuario.UsuarioService;
 import com.questoes.questoes.service.usuarioquestao.UsuarioQuestaoService;
 import com.questoes.questoes.web.dto.ResponseMensagemDTO;
-import com.questoes.questoes.web.dto.disciplina.CadastrarQuestoesDTO;
+import com.questoes.questoes.web.dto.questoes.CadastrarQuestoesDTO;
 import com.questoes.questoes.web.dto.questoes.RespostaUsuarioDto;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,6 +31,7 @@ public class QuestoesService {
     private final QuestoesRepository questoesRepository;
     private final DisciplinaService disciplinaService;
     private final BancaService bancaService;
+    private final AssuntoService assuntoService;
     private final UsuarioQuestaoService usuarioQuestaoService;
 
     @Transactional
@@ -82,6 +77,7 @@ public class QuestoesService {
         try {
             Banca banca = bancaService.buscarBancaNome(cadastrarQuestao.getBanca());
             Disciplina disciplina = disciplinaService.buscarDisciplina(cadastrarQuestao.getDisciplina());
+            Assunto assunto = assuntoService.buscarAssunto(cadastrarQuestao.getAssunto());
             if(banca == null) {
                 bancaService.salvarBanca(cadastrarQuestao.getBanca());
                 banca = bancaService.buscarBancaNome(cadastrarQuestao.getBanca());
@@ -92,9 +88,15 @@ public class QuestoesService {
                 disciplina = disciplinaService.buscarDisciplina(cadastrarQuestao.getDisciplina());
             }
 
+            if(assunto == null) {
+                assuntoService.salvarAssunto(cadastrarQuestao.getAssunto(), disciplina.getNome());
+                assunto = assuntoService.buscarAssunto(cadastrarQuestao.getAssunto());
+            }
+
             Questoes questao = new Questoes();
             questao.setBanca(banca);
             questao.setDisciplina(disciplina);
+            questao.setAssunto(assunto);
             questao.setPergunta(cadastrarQuestao.getPergunta());
             questao.setAlternativas(cadastrarQuestao.getAlternativas());
             questao.setResposta(cadastrarQuestao.getResposta());

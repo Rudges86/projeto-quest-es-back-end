@@ -2,10 +2,14 @@ package com.questoes.questoes.service.disciplina;
 
 import com.questoes.questoes.entity.Disciplina;
 import com.questoes.questoes.repository.disciplina.DisciplinaRepository;
+import com.questoes.questoes.web.dto.disciplina.DisciplinaDTO;
+import com.questoes.questoes.web.dto.mapper.DisciplinaMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -28,5 +32,8 @@ public class DisciplinaService {
         Disciplina disciplina = disciplinaRepository.findByNome(nomeDisciplina);
         return disciplina;
     }
-
+    @Transactional(readOnly = true)
+    public List<DisciplinaDTO> listarTodas() {
+        return  DisciplinaMapper.toListDto(disciplinaRepository.findAll());
+    }
 }

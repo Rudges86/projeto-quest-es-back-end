@@ -6,6 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class BancaDto {
-    private String banca;
+    private Long id;
+    private String nome;
 
 }

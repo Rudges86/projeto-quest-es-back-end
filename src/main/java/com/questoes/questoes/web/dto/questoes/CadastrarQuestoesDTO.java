@@ -1,4 +1,4 @@
-package com.questoes.questoes.web.dto.disciplina;
+package com.questoes.questoes.web.dto.questoes;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 public class CadastrarQuestoesDTO {
     private String banca;
+    private String assunto;
     private String disciplina;
     private String pergunta;
     private String ano;

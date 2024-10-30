@@ -1,11 +1,10 @@
 package com.questoes.questoes.web.controller;
 
 import com.questoes.questoes.config.security.jwt.JwtUserDetails;
-import com.questoes.questoes.entity.Questoes;
 import com.questoes.questoes.repository.questoes.QuestoesProjection;
 import com.questoes.questoes.service.Questoes.QuestoesService;
 import com.questoes.questoes.web.dto.ResponseMensagemDTO;
-import com.questoes.questoes.web.dto.disciplina.CadastrarQuestoesDTO;
+import com.questoes.questoes.web.dto.questoes.CadastrarQuestoesDTO;
 import com.questoes.questoes.web.dto.mapper.PageableMapper;
 import com.questoes.questoes.web.dto.pageable.PageableDTO;
 import com.questoes.questoes.web.dto.questoes.RespostaUsuarioDto;
